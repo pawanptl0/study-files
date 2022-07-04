@@ -1,0 +1,66 @@
+Next.js is a flexible React framework that gives you building blocks to create web applications.
+
+In Next.js, compilation happens during the development stage as you edit your code, and as part of the build step to prepare your application for production.
+Minification is the process of removing unnecessary code formatting and comments without changing the code’s functionality. The goal is to improve the application’s performance by decreasing file sizes.
+
+Code-splitting is the process of splitting the application’s bundle into smaller chunks required by each entry point.
+
+With Next.js, three types of rendering methods are available: Server-Side Rendering, Static Site Generation, and Client-Side Rendering.
+
+Pre-Rendering
+Server-Side Rendering and Static Site Generation are also referred to as Pre-Rendering because the fetching of external data and transformation of React components into HTML happens before the result is sent to the client.
+
+Server-Side Rendering
+With server-side rendering, the HTML of the page is generated on a server for each request. The generated HTML, JSON data, and JavaScript instructions to make the page interactive are then sent to the client.
+
+
+Static Site Generation
+With Static Site Generation, the HTML is generated on the server, content is generated once, at build time, when the application is deployed, and the HTML is stored in a CDN and re-used for each request.
+
+create next js application
+npm: npx create-next-app my-app
+yarn: yarn create next-app my-app
+
+go to my-app folder and run 'yarn run dev'
+
+Client-Side Navigation:
+The Link component enables client-side navigation between two pages in the same Next.js app.
+import Link from 'next/link'.
+<a> do full refresh but <Link> do necessary contents refresh.
+
+Next.js automatically optimizes your application for the best performance by code splitting, client-side navigation, and prefetching (in production).
+
+If you need to link to an external page outside the Next.js app, just use an <a> tag without Link.
+
+html <header>
+import Head from 'next/head'
+add <Head> in return() with <title>
+
+image:
+import Image from "next/image"
+<Image src="" height={300} width={300} alt="" />
+
+add external script innto <Head>
+import Script from 'next/script'
+<Script
+        src="https://connect.facebook.net/en_US/sdk.js"
+        strategy="lazyOnload"
+        onLoad={() =>
+          console.log(`script loaded correctly, window.FB has been populated`)
+        }
+      />
+
+
+      
+
+
+
+{' '} adds an empty space, which is used to divide text over multiple lines.
+
+React:
+React is Declarative library.
+'react-dom' provides DOM-specific methods that enable you to use React with the DOM.
+pass pieces of information as properties to React components. These are called props.
+
+Once you save the file, you should notice the browser automatically updates to reflect the change.
+This feature is called Fast Refresh. It gives you instantaneous feedback on any edits you make

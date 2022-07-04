@@ -1,0 +1,489 @@
+MongoDB: 
+- It stores data as documents(set of field and value pairs). 
+- documents are stored in collections(organized store of documents).
+- stores data is BSON format.
+Advantagers: 
+schema less, no complex joins, easy to scale.
+Data Model:
+1. Embedded data model: all the related data in a single document.
+2. can refer the sub documents in the original document, using references.
+
+commands:
+1. use dbName: create new db. if exist return it.
+2. db: check current db.
+2. db.dropDatabase(): Drop databse.
+3. show dbs: list of dbs.
+4. db.createCollection("movies"): create a collection.
+5. show collections: list of collections.
+6. db.movies.drop(): drop collection name 'movies'. if success return 'true'
+
+Methods:
+1. save(): replaces the existing document with the new document passed in the save() method. 
+const { nMatched, nUpserted, nModified, _id } = await db.movies.save({ ...}).
+
+2. findOneAndUpdate(): updates the values in the existing document. 
+const { _id, updatedDoc } = db.movies.findOneAndUpdate({ city: 'Pune' }, { state: 'MH' })
+
+3. remove(): used to remove a document from the collection. db.movie.remove(criteria)
+
+Indexing: Without indexes, MongoDB must scan every document of a collection to select those documents that match the query statement. 
+Indexes are special data structures, that store a small portion of the data set in an easy-to-traverse form. The index stores the value of a specific field or set of fields, ordered by the value of the field as specified in the index.
+
+1. createIndex(): to create an index. */
+db.movies.createIndex({ title: 1 }). //1 and - 1 for ascending and descending order.
+
+  /* 2. dropIndex(): to drop the index. */
+  db.movies.dropIndex({ title: 1 })
+
+/* 3. dropIndexes(): drop multiple indexed
+
+4. getIndexes(): returns the description of all the indexes into the collection.
+
+Aggregation:
+process data records and return computed results. Aggregation operations group values from multiple documents together, and can perform a variety of operations on the grouped data to return a single result. */
+db.movies.aggregate([{ $group: { _id: "$director", num_movies: { $sum: 1 } } }])
+/* It scan all the documents to calculate movies directed by 'director' field. other aggregation expressions are $avg, $min, $max, $push, $first, $last, $addToSet.
+
+Piipeline: execute an operation on some input and use the output as the input for the next command and so on.
+pipeline stages: 
+$project - select some specific fields from a collection.
+$match − filtering operation.
+$group − actual aggregation.
+$sort − Sorts the documents.
+$skip − skip the documents.
+$limit − limits the documents.
+$unwind − This is used to unwind document that are using arrays.
+
+Sharding: process of storing data across multiple machines.
+Replication: process of synchronizing data across multiple servers.
+
+
+
+
+
+
+
+
+
+
+Atlas:
+Manage cluster creation, run and maintain deployed db, experiment with new tools and features.
+
+clusters: group of servers that store data.
+replica sets: a few connected mongodb instances(a single machine locally or globally running sertain software) that stores same data.
+
+MongoDB uses the dot notation to access the elements of an array and to access the fields of an embedded document. for Array use array.index. for object use embeded document.field
+
+
+
+MQL Operators:
+$: denotes the use of an operator and also for addresses the field value.
+Update Operators: $inc, $set, $unset
+Query Operators: $has
+  logic operatos: $and, $or, $not, $not
+  syntax: { operator: [{field: value}, {fild: value}]}
+Comparison Operators: $eq: equal to, $ne: not equal to, $lt: less than, $gt: greater than, 
+$lte: less than or Equal to, $gte: greater than or equal to, 
+syntax {field: { operator: value }}
+
+$expr: allows to use aggregation expression within query language.
+syntax: { $expr: { <expression> }}
+
+Read Operation
+1. findOne(query, oprions, callback) : returns single document.
+2. find(): returns all documents that match query.
+
+*/
+
+// find all documents
+await movies.find({})
+
+// Specify Equality condition: { <field1>: <value1>, ... }
+movies.find({ cast: 'Ashok Saraf' })
+
+// specify conditions using query operators: 
+movies.find({ cast: { $all: ['Ashok Saraf', 'Laxmikant Berde'] } }).pretty()
+//returns all documents which has mentioned names in well format.
+
+// specify 'AND' condition
+movies.find({ status: 'A', qty: { $lt: 30 } }) // get movies where status = 'A' AND qty is less than 30.
+
+// specify 'OR' condition
+movies.find({ $or: [{ status: 'A' }, { qty: { $lt: 30 } }] })
+// get movies where status = 'A' OR qty is less than 30.
+
+//Specify 'ANd' as well as 'OR' condition.
+movies.find({ city: 'Pune', $or: [{ qty: { $lt: 30 } }, { item: { $regex: '^p' } }] })
+//selects all documents in the collection where the 'status' equals "A" and either 'qty' is less than ($lt) 30 or 'item' starts with the character 'p'.
+
+// To specify a query condition on fields in an embedded/nested document, use '.' ("field.nestedField").
+// the field and nested field must be inside quotation marks.
+movies.find({ 'address.city': 'Pune' })
+
+// Match an Array: To specify equality condition on an array, use the query document { <field>: <value> }
+// where <value> is the exact array to match, including the order of the elements.
+movies.find({ tags: ['A', 'B'] }) //array order is important
+// OR
+movies.find({ tags: { $all: ['B', 'A'] } }) //array order neglected.
+
+// Use '$elemMatch' operator to specify multiple criteria on the elements of an array such that at least one array element satisfies all the specified criteria.
+movies.find({ dim_cm: { $elemMatch: { $gt: 22, $lt: 30 } } })
+//at least one element that is both greater than ($gt) 22 and less than ($lt) 30:
+
+// Use the '$size' operator to query for arrays by number of elements.
+movies.find({ tags: { $size: 3 } })
+//selects documents where the array 'tags' has 3 elements
+
+await movies.find({ status: { $in: ['A', 'B'] } })
+//all documents where status is either 'A', or 'B'
+
+const result4 = await movies
+  .find({ director: 'Dada Kondake' }, { title: 1, year: 1 })
+  .limit(10)
+  .sort([['year', 1]])
+  .skip(2)
+//OR using aggregation framework.
+const result5 = await movies.aggregate(
+  { $match: { director: 'Dada Kondake' } },
+  { $project: { title: 1, year: 1 } },
+  { $limit: 10 },
+  { $sort: { year: 1 } },
+  { $skip: 2 }
+)
+/*
+returns only 10 results that match the query in ascending order of 'year' which skips first 2 documents.
+specify '-1' for descending order(sort([['year', -1]])).
+*/
+
+// projection:  projection means selecting only the necessary data rather than selecting whole of the data of a document.
+movies.find({ cast: 'Ashok Saraf' }, { projection: { title: 1, year: 1, _id: 0 } })
+//returns only 'title' and 'year', other  fields are ignored. need to specify '_id' to not return.
+
+movies.find({ cast: 'Ashok Saraf' }).project({ title: 0, year: 0 })
+//returns all fields except 'title' and 'year'.
+
+//Type Check: query matches only documents that contain the 'item' field whose value is 'null'; i.e. the value of the 'item' field is of 'BSON Type' Null (type number 10)
+const cursor = db.collection('inventory').find({ item: { $type: 10 } })
+
+// Existence Check: query matches documents that do not contain the 'item' field:
+movies.find({ item: { $exists: false } })
+
+/*
+update operation:
+updateOne(), updateMany() and replaceOne()
+*/
+
+// 1. updateOne():
+const { result, matchedCount, modifiedCount, upsertedId } = await movies.updateOne(
+  { title: 'Pavankhind' },
+  {
+    $set: { title: 'PawanKhind', year: 2022 },
+    $currentDate: { lastModified: true }
+  })
+const { nModified, upserted } = result
+/* finds 'title' is equal to 'pavankhind' only first document and update 'title' and 'year'. 'upsert' is true means if no document found then create a new document. use updateMany() to update multiple documents. ses the '$currentDate' operator to update the value of the lastModified field to the current date.*/
+
+//Aggregation pipeline for Update.
+db.students.updateOne({ _id: 3 }, [{ $set: { "test3": 98, modified: "$$NOW" } }])
+
+// 4. updateMany()
+const { matchedCount, modifiedCount } = await movies.updateMany(
+  { title: 'Pavankhind' },
+  { $set: { title: 'PawanKhind', year: 2022 } },
+  { upsert: true })
+// returns number of matched and modified documents count. $set sets the value to new specified value.
+
+// 5. replaceOne()
+movies.updateMany(
+  { title: 'Pavankhind' },
+  { $inc: { pop: '10' } })
+// $inc is increment operator to  increment the value by specified value.
+
+
+//Write and Update (Insert) Operation
+// 1. insertOne(): Inserts 1 document
+const { result, insertedCount, insertedId } = await movies.insertOne({ title: 'Pachadlela', year: 2011 })
+const { n, ok } = result
+// insert 1 document. 'n' is no. of documnets tobe inserted and 'ok' is status response.
+
+// 2. insertMany(): insert multiple documents.
+const data = [{ title: 'Thartharat', year: 1989 }, { title: 'Duniyadari', year: 2001 }]
+const { insertedCount, insertedIds } = await movies.insertMany(data, { ordered: false })
+//inserts data as random order.
+
+
+
+//6. 
+
+movies.updateMany(
+  { title: 'Pavankhind' },
+  { $push: { theatres: 'Prabhat' } })
+// $push is operator used for push specified value into 'theatre' array.
+
+// Delete Operation
+// 1. deleteOne():
+const documentsCount = await movies.count() // counts the number of documents.
+const { result } = await movies.deleteOne({}) // deletes first document.
+const { n } = result //count no. of documents deleted.
+
+// 2. deleteMany():
+const { result } = await movies.deleteMany({ year: { $lt: 1993 } })
+//deltes the document has year less than 1993.
+const { n } = result //count no. of documents deleted.
+
+//Bulk writes: allows to client send multiple writes. can be either ordered or unordered.
+
+//connectionj pulling: all about reusing databse connection.
+
+
+//Aggregation framework: Its another way to query Database.
+// add() function is JS
+const add = (a, b) => a + b
+
+// add() in aggregation framework. { '$add' : [ '$a', '$b' ]}
+
+//aggregation framework data passed through multiple 'pipes'.
+const result8 = await movies.aggregate([
+  { $match: { director: 'Dada Kondake' } },
+  { $project: { title: 1, year: 1 } },
+  { $limit: 10 },
+  { $sort: { year: 1 } },
+  { $skip: 2 }]
+)
+
+// data passes throught first filter(pipe) '$match' then second filter(pipe) '$project' etc.
+
+
+Mongoose:
+schema: With Mongoose, everything is derived from a Schema. 
+model: A model is a class with which we construct documents.
+
+
+const mongoose = require('mongoose')
+const { Schema } = mongoose
+
+connect to database:
+mongoose.connect(DB_URL, {options})
+
+create schema:
+const kittySchema = new Schema({ name: { type: String, required: true}})
+
+compiling schema into a Model: 
+const Kitten = mongoose.model('Kitten', kittySchema)
+
+create a kitten document. Instances of Models are documents
+const fluffy = new Kitten({ name: 'Fluffy' })
+
+Each document can be saved to the database by calling its 'save' method:
+await fluffy.save()
+
+access all of the kitten documents through our Kitten model:
+const kittens = await Kitten.find()
+OR
+await Kitten.find({ name: /^fluff/ })
+
+Virtuals:
+Virtuals are document properties that can get and set. The getters are useful for formatting or combining fields, while setters are useful for de-composing a single value into multiple values for storage. virtuals are not stored in MongoDB, you can't query with them.
+const personSchema = new Schema({
+  name: {
+    first: String,
+    last: String
+  }
+});
+
+// compile our model
+const Person = mongoose.model('Person', personSchema);
+
+// create a document
+const axl = new Person({
+  name: { first: 'Axl', last: 'Rose' }
+});
+
+personSchema.virtual('fullName').
+  get(function() {
+    return this.name.first + ' ' + this.name.last;
+    }).
+  set(function(v) {
+    this.name.first = v.substr(0, v.indexOf(' '));
+    this.name.last = v.substr(v.indexOf(' ') + 1);
+  }); // get and set fullname property
+
+ax1.fullName = 'Prisha Patil'
+console.log(axl.fullName);
+
+SchemaTypes:
+select: defines 'projections'
+
+
+const personSchema = new Schema({
+  name: {type: String, lowercase: true, required: true, maxlength: 50, 
+  select: true, index: true, uique: true, uppercase: false, },
+  age:{ type: Number, min: 5, max:60, validate: fn, get: fn, set: fn, aliase: string,  },
+  data:{ type: Date, default: Date.now()}
+});
+
+
+save() method:
+The save() method returns a promise. If save() succeeds, the promise resolves to the document that was saved.
+
+Note that update(), updateMany(), findOneAndUpdate(), etc. do not execute save() middleware. If you need save middleware and full validation, first query for the document and then save() it.
+
+Subdocuments: 
+Subdocuments are documents embedded in other documents. In Mongoose, this means you can nest schemas in other schemas. subdocuments are not saved individually, they are saved whenever their top-level parent document is saved.
+ nested paths are subtly different from subdocuments
+
+ // Subdocument
+const subdocumentSchema = new mongoose.Schema({
+  child: new mongoose.Schema({ name: String, age: Number })
+});
+const Subdoc = mongoose.model('Subdoc', subdocumentSchema);
+
+// Nested path
+const nestedSchema = new mongoose.Schema({
+  child: { name: String, age: Number }
+});
+const Nested = mongoose.model('Nested', nestedSchema);
+Queries:
+Queries are not promises.Mixing promises and callbacks can lead to duplicate entries in arrays. use either one.
+There are no joins in MongoDB.
+
+findOneAndUpdate():
+let doc = await Character.findOneAndUpdate(filter, update, {
+  new: true, //it returns latest updated document.
+  upsert: true, // no document matches filter, MongoDB will insert one by combining filter and update 
+  rawResult: true // Return the raw result from the MongoDB driver
+}); 
+
+Lean:
+Mongoose queries return Documents are much heavier than vanilla JavaScript objects. Enabling the 'lean' option tells Mongoose to skip instantiating a full Mongoose document and just give you the POJO(plain old JavaScript objects). The downside of enabling lean is that lean docs don't have: Change tracking, Casting and validation,
+Getters and setters, Virtuals, save()
+
+const leanDoc = await MyModel.findOne().lean();
+
+Validation:
+Validation is defined in the 'SchemaType'.
+Validation is middleware. 
+You can disable automatic validation before save by setting the 'validateBeforeSave' option and manually run validation using 'doc.validate(callback)' or 'doc.validateSync()'.
+Validation is asynchronously recursive; works on documents and sub-documents also.
+
+All SchemaTypes have the built-in 'required' validator. 
+Numbers have 'min' and 'max' validators.
+Strings have 'enum', 'match', 'minLength', and 'maxLength' validators.
+
+const breakfastSchema = new Schema({
+  eggs: {
+    type: Number,
+    min: [6, 'Too few eggs, got {VALUE}'],
+    max: 12
+  },
+  bacon: {
+    type: Number,
+    required: [true, 'Why no bacon?']
+  },
+  drink: {
+    type: String,
+    enum: ['Coffee', 'Tea'],
+    required: function() {
+      return this.bacon > 3;
+    }
+  }
+});
+custom validator:
+const userSchema = new Schema({
+  phone: {
+    type: String,
+    validate: {
+      validator: function(v) {
+        return /\d{3}-\d{3}-\d{4}/.test(v);
+      },
+      message: props => `${props.value} is not a valid phone number!`
+    },
+    required: [true, 'User phone number required']
+  }
+});
+
+
+Mongoose program:
+const express = require('express')
+const mongoose = require('mongoose')
+const dotenv = require('dotenv')
+const authRouter = require('./routes/auth')
+
+const app = express()
+const port = 5000
+dotenv.config()
+
+//Connect to Database
+mongoose.connect(process.env.DB_CONNECT,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  () => console.log(`Connected to Mongoo Database.`))
+
+//Middlewares
+app.use(express.json())
+app.use('/api/user', authRouter)
+
+//Listen server
+app.listen(port, () => console.log(`Server started at port ${ port }`))
+
+Validaion:
+const Joi = require('joi')
+
+const registerValidation = (data) => {
+  const schema = Joi.object({
+    name: Joi.string().min(3).required(),
+    email: Joi.string().min(3).required().email(),
+    password: Joi.string().min(3).required()
+  })
+  return schema.validateAsync(data)
+}
+
+const loginValidation = (data) => {
+  const schema = Joi.object({
+    email: Joi.string().min(3).required().email(),
+    password: Joi.string().min(3).required()
+  })
+  return schema.validateAsync(data)
+}
+
+module.exports.registerValidation = registerValidation
+module.exports.loginValidation = loginValidation
+
+USer schema: 
+const mongoose = require("mongoose")
+
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true, min: 6, max: 255 },
+  email: { type: String, required: true, min: 6, max: 255 },
+  password: { type: String, required: true, min: 6, max: 255 },
+  date: { type: Date, default: Date.now }
+})
+
+module.exports = mongoose.model('User', userSchema)
+
+Authenntication:
+const router = require('express').Router()
+const User = require('../module/User')
+const { registerValidation, loginValidation } = require('../validation')
+
+
+router.post('/register', async (req, res) => {
+  const value = registerValidation(req.body)
+  try {
+    const value = registerValidation(req.body)
+    const user = new User(value)
+    const savedUser = await user.save()
+    res.send(savedUser)
+  }
+  catch (err) {
+    res.status(400).send(err)
+  }
+})
+
+module.exports = router
+
+
+
+My MongoDb Atlas:
+1. create an organisation 'PATIL'
+2. create a new project 'Coding'
+3. create a database. select 'shared' -> select cloud provider 'google cloud' -> select region 'Mumbai' -> set cluster name 'PuneCluster' -> add username 'Pawanptl0' and password 'Pawanptl0' -> choose 'my local environent' -> add my current ip address -> click on connect -> select 'connect your app;lication' -> copy url.

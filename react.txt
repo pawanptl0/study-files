@@ -1,0 +1,72 @@
+﻿
+React
+-----------------------------------------
+
+Rendering: It Divides into 2 phase.
+		1. Render Phase: During Initial rendering React goes 'root' to 'leaf'. It converts JSX into JS Object using 'CreateElement'. Put into virtual DOM and send updates to commit phase.
+		2. Commit Phase: Elements are Render into the DOM	
+		
+Re-rendering: It Divides into 2 phase.
+		1. Render Phase: React checks 'flagged' component. It converts JSX into JS Object using 'CreateElement'. Compare updated element with previous rendered elemetns tree. send only update to commit phase. For the same value component will not re-render. 
+		2. Commit Phase: Elements are Render into the DOM	
+		
+How to stop Unnecessary Renders: 
+	1.Parent has a Child and When Parent renders, child also render but not commit. Can stop this unnessary rendering by using child as 'children' in Parent. Component change its state not its props.
+	2. use childs memoized version.
+	3. Parent has Object and we passing it to child then use memoized version of that Object and pass memoized version to child. Same for array.
+	
+Ways to cause Re-rendering: When component calls useState's setter or useReducer's dispatch function. When parent components Re-renders. 
+	
+All consumers that are descendants of a Provider will re-render whenever the Provider’s value prop changes.
+
+
+current version of react: React 18.
+changes in react 18.
+
+import ReactDom from 'react-dom' //before 18
+import ReactDom from 'react-dom/client' // in 18
+
+ReactDom.render(<App />, document.getElementById('root')) //before 18
+
+const root = ReactDom.createRoot(document.getElementById('root'))
+root.render(<App />) // new in 18
+
+# before 18 state update was done without concurrency means state update was done sequential.
+# in 18 state update was done with concurrency means state update was done parallel.
+
+# New concurrent API's
+1. useTransition()  :It is hook use in functional component. It tells react that some state update ay be handled with lower priority. returs array with exactly 2 values [isPending, startTransition]
+
+2. startTransition(): It is function for class based compoenent. It tells react that some state update ay be handled with lower priority. wrap state update in startTransition()
+Ex. startTransition(() => setSelectedUser(user))
+
+3. useDefferedValue(): It is a hook. tell react that older value should be displayed until a new(updated) value is ready. kind of similar to startTransition(). 
+Ex. const defferedVal = useDefferedValue(value)
+get and deffered(old) value until updated value availabel.
+
+# New hooks
+1. useSyncExternalStore()
+2. useInsertionEffect()
+3. useId()
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+

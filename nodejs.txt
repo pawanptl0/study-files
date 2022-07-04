@@ -1,0 +1,476 @@
+
+NodeJS:
+Node.js is a open source, cross-platform environment and library for running JavaScript applications outside the browser which is used to create networking and server-side applications. 
+NodeJS app has 3 parts: import module, create server, read request and response.
+
+NPM:
+Node Package Manager to provide online repo and command line utility.
+
+NodeJs global Objects:
+__dirname, __filename, Console, Process, Buffer, setImmediate(callback[, arg][, ...]), 
+setInterval(callback, delay[, arg][, ...]), setTimeout(callback, delay[, arg][, ...]),
+clearImmediate(immediateObject), clearInterval(intervalObject), clearTimeout(timeoutObject)
+
+Modules:
+1. OS: provides OS related information.
+os.arch(), os.freemem(), os.homedir(), os.hostname(), os.platform(), os.tempdir(), os.totalmem(), os.type()
+
+2. crypto: supports cryptography.
+hash: It is a fixed-length string of bits.
+HMAC(Hash-based Message Authentication Code): It is a process of applying a hash algorithm to both data and a secret key that results in a single final hash.
+
+3. path: used to handle and transform files paths.
+
+4. querystring: provides methods to deal with query string. It can be used to convert query string into JSON object and vice-versa.
+
+5. Zlib:  provide compression and decompression (zip and unzip) functionalities. It is implemented using Gzip and deflate/inflate.
+
+6. assert: most elementary way to write tests.
+
+7. punycode: used to convert Unicode (UTF-8) string of characters to basic ASCII string of characters.
+
+8. util: it provides a functionj like any normal function would return promise.
+
+9. in fs module readFile, writeFile methods does not return promise. if we want to return promise then add followinf:
+consr {readFile, writeFile} = require('fs').promises
+
+NodeJS Errors:
+Standard JavaScript errors, System errors, User-specified errors, Assertion errors.
+
+socket programming:
+We can create chat application or communicate client and server applications using socket programming in Node.js. The Node.js 'net' module contains functions for creating both servers and clients.
+
+stram:
+Streams are the objects that read data from a source and write data to a destination. stream is an Event emitter instance and throws several events at different times like data, end, error, finish.
+There are four types of streams: 
+Readable, 
+Writable, 
+Duplex: This stream can be used for both read and write operations. 
+Transform: It is type of duplex stream where the output is computed according to input.
+
+
+Any async function accepts a callback as the last parameter and a callback function accepts an 'error' as the first parameter.
+
+//Ex. Read stream
+const fs = require('fs')
+let data = ''
+const stream = fs.createReadStream('welcome.txt')
+stream.on('data', (chunk) => {
+  data += chunk
+}) //if data then read it
+
+streamForRead.on('end', () => {
+  console.log(data)
+}) // after complet the reading
+
+streamForRead.on('error', (err) => {
+  console.log(err)
+})
+
+//Ex. Write stream
+let info = 'Welcome'
+const wstream = fs.createWriteStream('hello.txt')
+wstream.write(data, 'UTF-8')
+wstream.end()
+wstream.on('finish', () => {
+  console.log('complete')
+})
+wstream.on('error', (err) => {
+  console.log(err)
+})
+
+//The 'process' core module provides a handy method that allows you to programmatically exit from a Node.js program: 'process.exit()'
+
+//for environment variables create an '.env' file in the root directory, then use the 'dotenv' package to load them during runtime.
+
+// access environment variables from '.env' file.
+require('dotEnv').config()
+const port = process.env.PORT
+
+// pass arguments when invoking node.js application. 'arg' maybe single value or key value pair.
+node index.js arg
+
+// to access above 'arg'
+process.argv.forEach((val, index) => console.log(val))
+
+//coloring the console output is by using 'chalk' library.
+const chalk = require('chalk');
+console.log(chalk.yellow('hi!'));
+
+/*
+'path' module methods
+*/
+const path = require('path')
+path.join() //joins the path
+path.basename() // get file name
+path.dirname() //get full path until directory
+path.extname() //get extension name
+path.parse() //get params
+path.resolve() // create an absolute path.
+
+
+//'Progress' is an awesome package to create a progress bar in the console.
+
+//Expose functionality from a Node.js file using exports
+// Ex. 1, car.js
+const car = {}
+
+//exposes the 'car' object
+module.exports = car
+
+
+//get 'car' object in any other file.
+const car = require('./car')
+
+//Ex. 2
+
+const car = {}
+
+module.exports.car = car; // 'car' as exports property.
+
+// get 'car' propery. use object destructuring.
+const { car } = require('./items') // import above.
+//OR
+const items = require('./items')
+const car = items.car
+
+
+/* NPM: node package manager 'npm install'. it install everything(dependancies) that project needs from 'package.json', in  'node_modules' folder, creating it if it's not existing already. */
+npm install
+
+//installs and adds the entry to the package.json file as devDependencies.
+--save - dev
+  //OR 
+  - D
+
+// update all packages to nrwest version.  
+npm update
+
+// run specifying command line tasks
+npm run < task - name >
+
+/*When you install a package using npm you can perform 2 types of installation:
+a local install(package is installed in the current file tree, under the node_modules subfolder.) and 
+a global install(install the package  in global location.) find location 'npm root -g'. On Windows it could be C:\Users\YOU\AppData\Roaming\npm\node_modules
+
+The goal of package-lock.json file is to keep track of the exact version of every package that is installed so that a product is 100% reproducible in the same way even if packages are updated by their maintainers.
+
+Development dependencies are intended as development-only packages, that are unneeded in production. For example testing packages, webpack or Babel.
+*/
+
+/*
+Node.js Event Loop:
+
+It explains how Node.js Asynchronous Programming and Non blocking I/O works. The event loop continuously checks the call stack(LIFO (Last In, First Out)) to see if there's any function that needs to run. 
+The Message Queue is also where user-initiated events like click or keyboard events, or fetch responses are queued before your code has the opportunity to react to them. Or also DOM events like onload.
+The loop gives priority to the call stack, and it first processes everything it finds in the call stack, and once there's nothing in there, it goes to pick up things in the message queue.
+Job Queue(introduced in ES6) used by Promise is a way to execute the result of an async function as soon as possible, rather than being put at the end of the call stack. Promises that resolve before the current function ends will be executed right after the current function.
+
+ Every time the event loop takes a full trip, we call it a tick.
+
+ process.nextTick(fn): we instruct the engine to invoke 'fn' function at the end of the current operation, before the next event loop tick starts. like setTimeOut function.
+
+ 
+
+
+
+Express.JS
+*/
+  const express = require('express')
+const app = express()
+
+//Routing: 
+
+app.METHOD('/', (req, res) => { })
+//METHOD is get, post, put, delete....
+
+//route parameters:
+
+app.get('/users/:userId/books/:bookId', (req, res) => {
+  res.send(req.params) //{ "userId": "34", "bookId": "8989" }
+})
+
+//route handlers:
+//can handle multiple callbacks with 'next()' method.
+//Ex. 1
+app.get('/', (req, res, next) => {
+  console.log(`result will display in next callback`)
+  next()
+}, (req, res) => {
+  console.log('result')
+})
+
+//Ex. 2
+const callback1 = (req, res, next) => {
+  console.log(`result 1`)
+  next()
+}
+
+const callback2 = (req, res) => {
+  console.log('result 2')
+}
+
+app.get('/', [callback1, callback2])
+
+//response methods:
+app.get('/', (req, res) => {
+  res.download()	//Prompt a file to be downloaded.
+  res.end()	//End the response process.
+  res.json()	//Send a JSON response.
+  res.jsonp()	//Send a JSON response with JSONP support.
+  res.redirect()	//Redirect a request.
+  res.render()	//Render a view template.
+  res.send()	//Send a response of various types.
+  res.sendFile()	//Send a file as an octet stream.
+  res.sendStatus()	//Set the response status code and send its string representation as the response body.
+})
+
+//create chainable route handlers for a route path by using app.route()
+app.route('/user').get((req, res) => console.log('get')).post()
+
+//express.Router(): this class create modular, mountable route handlers.
+//Ex. user.js
+const express = require('express')
+const router = express.Router()
+
+router.get('/', (req, res) => {
+  console.log('User')
+})
+
+router.get('/products', (req, res) => {
+  console.log('Products')
+})
+
+module.exports = router
+
+//index.js
+
+const info = require('./user')
+
+app.use('/api', info)
+
+//can get path like .../api/product
+
+/* Middleware: request => middleware => response. It is a function which has access to 'request' and 'response' object and 'next()' function in the apps. An Express application is essentially a series of middleware function calls.
+request- response' cycle. like lifecycle hooks in react. 
+Ex. */
+app.get('/', (req, res, next) => next()) // the callback functionj is middleware function.
+
+/* Middleware  can  Execute any code, Make changes to the request and the response objects, End the request-response cycle., Call the next middleware in the stack.
+types of middleware:
+Application-level middleware: 
+Most bind with app.use() and app.METHOD(). skip the rest of the middleware functions and pass control to the next route. only work in app.METHOD() or router.METHOD() functions.
+*/
+app.get('/', (req, res, next) => next('route'))
+/*
+Router-level middleware: 
+bound to an instance of express.Router(). To skip the rest of the router’s middleware functions, 
+call 'next('router')' to pass control back out of the router instance.
+*/
+router.use((req, res, next) => {
+  if (!req.headers['x-auth']) return next('router')
+  next()
+})
+
+router.get('/user/:id', (req, res) => {
+  res.send('hello, user!')
+})
+
+/*
+Error-handling middleware: rror-handling middleware always takes four arguments (err, req, res, next).
+
+Built-in middleware:
+express.static: serves static assets such as HTML files, images, and so on.
+express.json: parses incoming requests in JSON format. 
+express.urlencoded: parses incoming requests with URL-encoded payloads. 
+
+Third-party middleware
+
+template engine: allows to use static files in application.
+
+Error handling: Errors in synchronous code inside route handlers and middleware require no extra work. If synchronous code throws an error, then Express will catch and process it. 
+Errors in asynchronous code inside route handlers and middleware need extra work. must pass them to the 
+'next()' function.
+
+ExpressJS:
+It is a web framework for Node.js. It is a fast, robust and asynchronous in nature. assume express as a layer built on the top of the Node.js that helps to manage a server and routes.
+
+The express.js request object represents the HTTP request and has properties for the request query string, parameters, body, HTTP headers like req.baseurl, body, cookies, hostname, ip, params, path, query, route etc.
+
+The Response object (res) specifies the HTTP response back to the client browser.
+It facilitates you to put new cookies value and that will write to the client browser (under cross domain rule)
+Methods: 
+res.attachment([filename]), 
+res.cookie(name, value [, options]), 
+res.download(path [, filename] [, fn]), //browser prompts to download attachment.
+res.end([data] [, encoding])  // ends response process.
+res.links(links),
+res.location(path),
+res.redirect([status,] path)
+res.render(view [, locals] [, callback]),
+res.sendFile(path [, options] [, fn]),
+res.set(field [, value])    
+
+
+
+Express methods: 
+*/
+
+
+NodeJS Mongodb:
+create databse:
+const mongo = require('mongodb').MongoClient
+const dbConnect = mongo.connect(url, (err, db) =>{
+  // create a collection.
+  db.createCollection('collection-name', (err, res) => {
+
+  })
+  //insert record
+  db.collection('users').insertOne({...data}, (err, res) =>{
+console.log(res._id)
+  })
+
+
+})
+
+
+Mongoose:
+// Import the mongoose module
+const mongoose = require('mongoose')
+
+// Set up default mongoose connection
+var mongoDB = 'mongodb://127.0.0.1/my_database';
+mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+
+// Get the default connection
+var db = mongoose.connection;
+
+// Define a schema
+var Schema = mongoose.Schema; //var Schema is constructor.
+
+//someModelSchema is instance of 'Schema' 
+var SomeModelSchema = new Schema({
+  name: String,
+  binary: Buffer,
+  living: Boolean,
+  updated: { type: Date, default: Date.now() },
+  age: { type: Number, min: 18, max: 65, required: true },
+  mixed: Schema.Types.Mixed,
+  _someId: Schema.Types.ObjectId,
+  array: [],
+  ofString: [String], // You can also have an array of each of the other types too.
+  nested: { stuff: { type: String, lowercase: true, trim: true, min: [6, 'you have less than 6 stuffs.'] } }
+});
+
+// Compile model from schema
+var SomeModel = mongoose.model('SomeModel', SomeModelSchema )
+//first argument is the singular name of the collection(SomeModel)
+
+Schema and Model:
+allows you to define the fields stored in each document along with their validation requirements and default values. Schemas are then "compiled" into models using the 'mongoose.model()'.use model to find, create, update, and delete objects of the given type. The model represents a collection, while the model's instances represent individual documents that you can save and retrieve.
+
+To create a record you can define an instance of the model and then call save().
+// Create an instance of model SomeModel
+var awesome_instance = new SomeModel({ name: 'awesome' });
+
+// Save the new model instance, passing a callback
+awesome_instance.save(function (err) {
+  if (err) return handleError(err);
+  // saved!
+});
+
+OR
+
+You can also use create() to define the model instance at the same time as you save it.
+SomeModel.create({ name: 'also_awesome' }, function (err, awesome_instance) {
+  if (err) return handleError(err);
+  // saved!
+});
+
+
+search in collection:
+
+var Athlete = mongoose.model('Athlete', yourSchema);
+
+// find all athletes who play tennis, selecting the 'name' and 'age' fields
+Athlete.find({ 'sport': 'Tennis' }, 'name age', function (err, athletes) {
+  if (err) return handleError(err);
+})
+
+OR
+
+Athlete.
+  find().
+  where('sport').equals('Tennis').
+  where('age').gt(17).lt(50).  //Additional where query
+  limit(5).
+  sort({ age: -1 }).
+  select('name age').
+  exec(callback); // where callback is the name of our callback function.
+
+
+ All callbacks in Mongoose use the pattern callback(error, result). If an error occurs result will be null. If the query is successful, the error parameter will be null.
+
+search methods:
+findById(): Finds the document with the specified id.
+findOne(): Finds a single document that matches the specified criteria.
+findByIdAndRemove(), findByIdAndUpdate(), findOneAndRemove(), findOneAndUpdate(): Finds a single document by id or criteria and either updates or removes it. 
+
+You can create references from one document/model instance to another using the ObjectId schema field, or from one document to many using an array of ObjectIds. The field stores the id of the related model. If you need the actual content of the associated document, you can use the populate() method in a query to replace the id with the actual data.
+
+var authorSchema = Schema({
+  name    : String,
+  stories : [{ type: Schema.Types.ObjectId, ref: 'Story' }]
+});
+
+var storySchema = Schema({
+  author : { type: Schema.Types.ObjectId, ref: 'Author' },
+  title    : String
+});
+
+var Story  = mongoose.model('Story', storySchema);
+var Author = mongoose.model('Author', authorSchema);
+
+var bob = new Author({ name: 'Bob Smith' });
+
+bob.save(function (err) {
+  if (err) return handleError(err);
+
+  //Bob now exists, so lets create a story
+  var story = new Story({
+    title: "Bob goes sledding",
+    author: bob._id    // assign the _id from our author Bob. This ID is created by default!
+  });
+  story.save(function (err) {
+    if (err) return handleError(err);
+    // Bob now has his story
+  });
+});
+
+Story
+.findOne({ title: 'Bob goes sledding' })
+.populate('author') //This populates the author id with actual author information!
+.exec(function (err, story) {
+  if (err) return handleError(err);
+  console.log('The author is %s', story.author.name);
+  // prints "The author is Bob Smith"
+});
+
+
+//Express Router:
+The express.Router middleware allows us to group the route handlers for a particular part of a site together and access them using a common route-prefix.
+
+Route parameters are named URL segments used to capture values at specific positions in the URL. The named segments are prefixed with a colon and then the name (e.g. /:your_parameter_name/. The captured values are stored in the req.params.
+
+
+why need Token for authentication?
+bcoz REST api is stateless. It can not store any data. so we have to save token and send each request response cycle. token stored at client side.
+
+
+
+
+
+
+
+
+

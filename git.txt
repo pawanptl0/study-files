@@ -1,0 +1,262 @@
+# Git
+It is open source, fast, scalable. cheap branching/merging VCS.
+
+# Version Control System
+used to track history and work together. 
+
+# Centralized VCS
+It has one central server and all the team members are connect and share code.
+
+# Distributed VCS
+Each memeber has his local server(VCS). ex. Git 
+
+# Git BASH(Bourne Again Shell): 
+git's command line interface like CMD in windows.
+
+# Github
+code hosting platform for version control and collaboration.
+
+# Repository
+location where code history is stored.
+
+# branch 
+In Git, a branch is a new/separate version of the main repository. Branches allow you to work on different parts of a project without impacting the main branch. When the work is complete, a branch can be merged with the main project. You can even switch between branches and work on different projects without them interfering with each other. Branching in Git is very lightweight and fast!
+
+## Git Workflow
+Files in Git repository folder can be in one of 2 states Tracked (files that Git knows about and are added to the repository) and Untracked (files that are in your working directory, but not added to the repository)
+To get Git to track them, you need to stage files, or add them to the staging environment. Staged files are files that are ready to be committed to the repository you are working on.
+Adding commits keep track of our progress and changes as we work. Git considers each commit change point or "save point". It is a point in the project you can go back to if you find a bug, or want to make a change.
+
+# Short status flags:
+?? - Untracked files
+A - Files added to stage
+M - Modified files
+D - Deleted files
+
+## Git and Github Example
+create a folder 'hello-world' and add 'index.html' and 'readme.md' file.
+open 'git bash' or 'cmd' or 'vscode terminal'
+
+# git init
+# git add --all
+# git commit -m "First release of hello-world"
+
+# git branch hello-world-images 
+create a new branch 'hello-world-images'.
+
+# git checkout hello-world-images 
+switch to 'hello-world-images'.
+
+add an image to the working folder and a line of code in the index.html
+
+# git add --all
+add changes to the stage of 'hello-world-images'
+
+# git commit -m "Added image to Hello World"
+
+# git checkout -b emergency-fix
+Using the '-b' option on checkout will create a new branch, and move to it, if it does not exist
+
+fix imaginary error in 'index.html' file.
+
+# git add index.html
+# git commit -m "updated index.html with emergency fix"
+# git checkout master
+Switched to branch 'master'
+
+# git merge emergency-fix
+Now we merge the current branch (master) with emergency-fix
+
+# git branch -d emergency-fix
+Deleted branch emergency-fix (was dfa79db).
+
+
+## Push Local Repository to GitHub
+create new repo 'hello-world' on github.
+
+# git remote add <remote_name> <remote_repo_url>
+# git remote add origin https://github.com/pawanptl0/hello-world.git
+adding a 'remote' repository, with the specified URL, as an 'origin' to your local Git repo.
+
+# git push -u <remote_name> <local_branch_name>
+# git push --set-upstream origin master
+now our all local code is on github.
+
+## Edit Code in GitHub
+pull is a combination of 2 different commands 'fetch' and 'merge'. It is used to pull all changes from a remote repository into the branch you are working on.
+chanage file 'readme.md' on github and commit changes.
+go to our local project
+# git fetch origin
+fetch gets all the change history of a tracked branch/repo.
+
+# git status
+# git log origin/master OR git log --oneline
+# git diff origin/master
+# git merge origin/master
+merge combines the current branch, with a specified branch. we can merge our current branch (master) with origin/master
+
+Make another change to the Readme.md file on GitHub.
+# git pull origin
+
+## Push Changes to GitHub
+make changes on index file on local.
+# git commit -a -m "Updated index.html. Resized image"
+# git status
+# git push origin
+
+## Create a New Branch on GitHub
+create a new branch 'html-skeleton' on github and make some changes on index file and commit.
+go to our local project
+# git pull
+we are up to date bcoz we are in 'master' but we know about 'html-skeleton'.
+
+# git branch -a 
+shows all local and remote branches.
+
+# git branch -r 
+shows all remote branches.
+
+# git checkout html-skeleton
+Switched to a new branch 'html-skeleton'
+
+# git pull
+
+## Push a Branch to GitHub
+create new branch on local name 'update-readme'
+# git checkout -b update-readme
+
+make changes in 'readme.md'
+
+# git add README.md
+# git commit -m "Updated readme for GitHub Branches"
+# git push origin update-readme
+push the branch from our local Git repository, to GitHub, where everyone can see the changes.
+
+Delete unnnecessary branches from Github after merging.
+
+## Git Github pages
+GitHub pages need a special name and setup to work. It needs to be your GitHub 'username', followed by '.github.io':
+create new repo 'pawanptl0.github.io'
+go to our local project 'hello-world'
+
+# git remote add gh-page https://github.com/pawanptl0/pawanptl0.github.io.git
+add 'gh-page' is remote repository now for our local repo.
+
+Make sure you are on the 'master' branch
+# git push gh-page master
+push the 'master' branch to the new remote
+
+go to Github repo -> settings -> pages (on left side).
+click on url.
+
+
+## What is SSH
+SSH is a secure shell network protocol that is used for network management, remote file transfer, and remote system access. SSH uses a pair of SSH keys to establish an authenticated and encrypted secure network protocol. It allows for secure remote communication on unsecured open networks.
+The "public" key is the one you share with the remote party. Think of this more as the lock. The "private" key is the one you keep for yourself in a secure place. Think of this as the key to the lock.
+
+# ssh-keygen -t rsa -b 4096 -C "test@w3schools.com"
+creating a new key, using email as a label
+
+
+## Commands:
+
+# git --version 
+
+# git help --all OR git <command> -help
+
+# git config –global user.name “Pawan Patil”
+# git config –global user.email “pawanptl0@gmail.com”
+sets the author name and email address respectively to be used with your commits for all repositories for 
+current user.
+
+# git init OR git init '/path/folder-name'
+start a new repository. It will create empty '.git' folder.
+
+# git status
+
+# git add . OR git add file1 file2 ... OR git add --all OR git add -A
+add files to local staging area which git called "index".
+
+# git commit OR git commit -m “Type in the commit message” OR git commit -a
+permanently store the snapshot of the files of staging area to the repository(its hidden folder in 
+our local project).
+
+# git diff
+shows the file differences which are not yet staged.
+
+# git diff –staged
+shows the differences between the files in the staging area and the latest version present.
+
+# git diff [first branch] [second branch]
+shows the differences between the two branches mentioned.
+
+# git branch experimental
+create a new branch named "experimental". 
+
+# git branch
+get a list of all existing branches. or find out which branch we have commited the code.
+
+# git clone [url]
+used to obtain a repository from an existing URL.
+
+# git push [variable name] master
+sends the committed changes of 'master' branch to your remote repository.
+variable name mostly is "origin"
+
+# git pull [Repository Link]
+fetches and merges changes on the remote server to working directory.
+
+# git log
+it shows our previous comits.
+
+# git restore filename
+discard the current made changes which is not yet staged.
+
+# git restore --staged filename
+to unstage the chages.
+
+# git checkout id
+id id commit id which we find i git log. this command store files until that id commit.
+
+# git reset 9a9add8
+reset to that comit id.
+
+# git checkout -- 
+current changes which is not staged are reverted.
+
+# git add file2
+suppose we delete the file2 from our project and run above command then It deletes the file from staging area.
+
+# git commit -m 'second file deleted'
+It commits the snapshot of deleted file2
+
+# git add file1 main
+change name 'file1' to 'main' which is already commited.
+
+# git mv main.txt file1.txt 
+It renames main.txt to file1.txt in staging area
+
+# git commit -a -m "Updated index.html with a new line"
+It is possible to commit changes directly, skipping the staging environment. The '-a' option will automatically stage every changed, already tracked file.
+
+## .gitignore
+# ignore ALL .log files
+*.log
+
+# ignore ALL files in ANY directory named temp
+temp/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

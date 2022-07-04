@@ -1,0 +1,80 @@
+avoid Internal state of a component, Internal methods of a component, Lifecycle methods of a component and Child components implementation details in testing
+
+Queries:
+
+Queries  ("get", "find", "query") are the methods that Testing Library gives you to find elements on the page.
+
+Types of Queries:
+Single Element:
+getBy...: Returns matching node otherwise error.
+queryBy...: returns matching node otherwise null.
+findBy...: returns Promise otherwise error.
+
+Multiple Element:
+getAllBy...: returns array of matching nodes otherwise error.
+queryAllBy...: returns array of matching nodes otherwise empty array.
+findAllBy....: returns promise which resolves array of elements otherise error.
+
+Role: getByRole('button', {name: /submit/i}). use checked, selected etc instead of name. The getByRole function is usually used to retrieve elements by aria-label attributes. 
+LabelText:: mostly used for form fields.to find elements using label text.
+PlaceholderText:
+Text: Outside of forms used to find non-interactive elements (like divs, spans, and paragraphs).
+DisplayValue: 
+AltText:
+Title:
+TestId: only recommended for cases where we can't see,  can't match by role or text or it doesn't make sense (e.g. the text is dynamic).
+
+screen: DOM Testing Library exports a 'screen' object which has every query that is pre-bound to 'document.body'. 
+ Example 1:
+import {render, screen} from '@testing-library/react'
+
+render(
+    <label htmlFor="example">Example</label>
+)
+
+const exampleInput = screen.getByLabelText('Example')
+
+Example 2:
+
+screen.getByText('Example') // full string match
+screen.getByText(/Example/i) // substring match, ignore case
+// Matching with a custom function:
+screen.getByText((content, element) => content.startsWith('Example'))
+
+For convenience screen also exposes a debug method in addition to the queries. This method is essentially a shortcut for console.log(prettyDOM()).
+
+Actions:
+
+fireEvent(node: HTMLElement, event: Event): Event like ''
+fireEvent[eventName]: eventName may be 'change', 'click', ...
+fireEvent.change(getByLabelText(/username/i), {target: {value: 'a'}})
+
+render() options:
+const {container, unmount, rerender, debug, asFragment, ...} = render(<TableBody {...props} />)
+
+render() result:
+const {getByLabelText, queryAllByTestId, ...} = render(<Component />)
+
+import {cleanup, render, fireEvent, renderHook} from '@testing-library/react'
+test.afterEach(cleanup)
+
+describe('my function or component', () => {
+  test('does the following', () => {
+
+  });
+});
+
+Whereas the describe-block is the test suite, the test-block (which also can be named 'it' instead of test) is the test case. 
+What we put into the test cases are called assertions (e.g. expect in Jest).
+If we using create-react-app, Jest (and React Testing Library) comes by default with the installation.
+RTL's render function takes any JSX to render it.
+React Testing Library offers you different search functions to grab elements by using screen object. The selected element can then be used for user interactions or assertions.
+toBeInTheDocument(): checks whether the element is in the DOM.  
+Assertive Functions
+Assertive functions happen on the right hand-side of your assertion.
+
+
+
+Make ordrer
+spinach, paneer, totmato, oats, bhagar millet(vrat tandul), ginger paste, garlic paste
+cauliflourwe, buffalo milk, jowar puffs

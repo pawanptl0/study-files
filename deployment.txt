@@ -1,0 +1,164 @@
+Deploy Project on Netlify.
+
+Method 1.
+	- Create react project and buid.
+	- It creates a build folder.
+	- Simply drag build folder in drop section of netlify and change the name.
+	- Done.
+
+Method 2.
+	- Open react project folder like 'my-app' and run following commands:
+		- git init
+		- git add .
+		- git commit -m 'initial commit'
+
+		- Create new repo on Github name like 'tempRepo'.
+
+		- git remote add origin git@github.com/pawanptl0/tempRepo.git
+		- git branch -M main
+		- git push -u origin main
+	- our code is now on github
+	- Go to netlify and click 'new site' -> 'github' -> complete authentication -> Select 'tempRepo' 
+	- Netlify run build command automatically. 
+	- click on deploy site button and change the name of domain/site.
+	- Done
+
+(Sometimes Project not built on Netlify through 'Method 2'. Go to 'package.json' file. Check 'build':'react-scripts build'. It work locally fine but not on netlify. Change 'build':'CI= react-scripts build')
+
+Netlify update Project automatically when we commit changes on Github.
+---------------------------------------------------------------------------------------------------------------
+
+Deploy Project on Github.
+	- Create react app 'my-app'
+	- Create new repo on Github 'react-deploy'
+	- npm install gh-pages --save-dev  //It installs github pages as dev dependancies
+	- Open 'package.json' file. 
+		- Add "homepage":"http://pawanptl0.github.io/react-deploy", above "name".
+		- Go to "scripts" add "predeploy":"npm run build", "deploy":"gh-pages -d build",
+	- Run following command in Local react app
+		- git init
+		- git add .
+		- git commit -m "initial deployment..."
+		- git remote add origin https://github.com/pawanptl0.react-deploy.git
+		- git branch -M main
+		- git push -u origin main
+		- npm/yarn run deploy
+		
+	click on 'http://pawanptl0.github.io/react-deploy'	
+	
+	- (optional) Go to github-> repository 'react-deploy' -> click settings -> find our project url
+	- Done.
+
+------------------------------------------------------------------------------------------------------
+
+		
+---------------------------------------------------------------------------------------------------------------
+
+Add Local Repository to Github
+
+	- Create new repo 'demo-app' on GIthub
+	- Create React app 'my-app' and run following commands
+		- git init  //It will create empty '.git' folder
+		- git status //check status
+		- git add .'OR git add fileName.ext fileName.ext  //add files to staging
+		- git commit -m 'msg' //commit staging to repository
+		- git remote add origin https://github.com/pawanptl0/demomyapp
+		- git push -u origin master  //master branch created and files added into it
+		
+---------------------------------------------------------------------------------------------------------------
+
+
+Heroku
+Deploy NodeJS app on Heroku
+1. create a Heroku account.
+2. install Heroku CLI tool.
+https://devcenter.heroku.com/articles/heroku-cli
+"The Windows installers display a warning titled �Windows protected your PC� to some users. To run the installation when this warning shows, 
+click �More info�, verify the publisher as �salesforce.com, inc�, then click the �Run anyway� button."
+
+3. open our project cmd type 'heroku -v' 
+It shows some terms and conditions related info if we install it correctly.
+
+4. type 'heroku login' press enter
+It says press any key to browser login then press any key and redired to browser's cli page for login.
+login here and close the tab or not close. it shows logged in msg on cmd.
+
+5. install git and type 'git --version'. it shows version of git installed.
+
+6. go to our project folder heare is 'weather-app'. open cmd and type following commands:
+git init 
+git status 
+git add .
+git commit -m 'init commit'
+
+7. Now setup SSH key
+in project folder cmd type following comand:
+ssh-keygen -t rsa -b 4096 -C "pawanptl0@gmail.com"
+-b for bits. 
+-C(capital c) for coment . provide your email id
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Deploy MERN application
+- Brad Traversy
+https://www.youtube.com/watch?v=mvfsC66xqj0&list=PLillGF-RfqbbQeVSccR9PGKHzPJSWqcsm&index=3
+
+Method 1:
+1. create a folder 'myApp'. open CMD and fire 'yarn init' and add necessary dependancies with concurrent dev dependancy.
+2. create a folder 'backend' and 'frontend' in 'myApp' folder.
+3. set port like 5000. 
+4. open 'server.js' file from 'backend'
+// Serve frontend
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+  app.get('*', (req, res) =>
+    res.sendFile(
+      path.resolve(__dirname, '../', 'frontend', 'build', 'index.html')
+    )
+  );
+} else {
+  app.get('/', (req, res) => res.send('Please set to production'));
+}
+
+4. open 'myApp' folders 'package.json' and add following:
+"start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
+
+5. open 'frontend' folders 'package.json' and add following:
+ "proxy": "http://localhost:5000"
+
+7. fo to 'frontend' and fire npm run build.
+8. heroku login process in our main folder....
+fire command: heroku create mernApp
+add .env data manually into heroku site bcoz .env added into .gitignore file.
+git add .
+git comit -m 'final deployment'
+git push heroku main // this comand find in heroku site.
+heroku open
+
+
+9. 
+
+
+---------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

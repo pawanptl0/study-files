@@ -1,0 +1,55 @@
+
+- on left panel right click on 'Open Editor' to hide it.
+- left panel 'search' option to search text in any files and it display result in front of it.
+- Git extension for git commit.
+- debug for debug.
+- we can open terminal by clicking left bottom icons on 'blue bar'
+- we can open any menu and its subMenu through 'view' -> 'command palett', shortcut(ctrl + shift + p)
+- ctrl + R to switch between different projects
+- ctrl + B toggle side bar
+- make word-wrap 'on' from settings
+- check 'format on save' in settings 
+- type clg for console.log
+
+
+EXTENSIONS
+----------------------------------
+
+- Better comments - adds commmments in code
+- Live server 
+- Polacode - to share our code snippets in image file.
+- Auto rename tag  
+- bracket pair colorizer 2 - each bracket has different color to understand where to start and end
+- indent-rainbow
+- REST client - its like postman.  
+- cloak - hide sensitive files like .env
+- css peak - to see what css gives to html tag by hovering over classname.
+- dotenv - for environment variables
+- Git lens - working with git
+- ES7/react.....
+- import cost - 
+- markdown pdf
+- settings sync - save our all custome VS code settings to github.
+- HTML CSS support - 
+- live sass compiler
+- material icons
+- live share
+- vscode icons
+- debugger for chrome
+- cobalt2 
+- eslint
+
+
+
+
+Coaches in train
+1. First AC(1A) - fully AC 4 berth(cabin) or 2 bearth(coupe) separate compartent with door. no side seats.
+2. Executive Anubhuti(EA) - airline like coaches. does not have sleeper coach. chairs with LCD screens with headphone.
+3. AC Executive class(EC) - fully AC no birth seats are facing each other.
+4. second AC or AC 2-tier (2A) - no middle birts. curtains for privacy.
+5. first class(FC) - non AC coaches. has coupe and cabin. 
+6. third AC or AC 3-tier - it has middle birth. no curtains. 
+7. third AC econoy(3E) - like 3A coaches. 
+8. AC chair car (CC) - only seating arrangent with 3 x 2 seats per row. 
+9. Sleeper (SL) - non AC coaches. no window like AC. 
+10. second seating or 2S -  
