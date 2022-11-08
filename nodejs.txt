@@ -12,14 +12,14 @@ setInterval(callback, delay[, arg][, ...]), setTimeout(callback, delay[, arg][, 
 clearImmediate(immediateObject), clearInterval(intervalObject), clearTimeout(timeoutObject)
 
 Modules:
-1. OS: provides OS related information.
+1. OS: provides OS related utility methods and properties.
 os.arch(), os.freemem(), os.homedir(), os.hostname(), os.platform(), os.tempdir(), os.totalmem(), os.type()
 
 2. crypto: supports cryptography.
 hash: It is a fixed-length string of bits.
 HMAC(Hash-based Message Authentication Code): It is a process of applying a hash algorithm to both data and a secret key that results in a single final hash.
 
-3. path: used to handle and transform files paths.
+3. path: provides utilities for working with file and directory paths. used to handle and transform files paths.
 
 4. querystring: provides methods to deal with query string. It can be used to convert query string into JSON object and vice-versa.
 
@@ -31,8 +31,10 @@ HMAC(Hash-based Message Authentication Code): It is a process of applying a hash
 
 8. util: it provides a functionj like any normal function would return promise.
 
-9. in fs module readFile, writeFile methods does not return promise. if we want to return promise then add followinf:
-consr {readFile, writeFile} = require('fs').promises
+9. fs: interacting with file system. readFile, writeFile methods does not return promise. if we want to return promise then add following:
+consr {readFile, writeFile} = require('fs').promises.
+
+10. event: A signal that something is happened in application.
 
 NodeJS Errors:
 Standard JavaScript errors, System errors, User-specified errors, Assertion errors.

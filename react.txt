@@ -1,6 +1,10 @@
 ﻿
 React
 -----------------------------------------
+SPA - server only sends single HTML page. thereafter react takes over and controls the UI.
+User clicks on different links it seems that it request to new page to the server. 
+but its not happen the UI is handled by  react and it decide which component to display and not.
+smoother UI, better user experience.
 
 Rendering: It Divides into 2 phase.
 		1. Render Phase: During Initial rendering React goes 'root' to 'leaf'. It converts JSX into JS Object using 'CreateElement'. Put into virtual DOM and send updates to commit phase.
@@ -48,6 +52,81 @@ get and deffered(old) value until updated value availabel.
 1. useSyncExternalStore()
 2. useInsertionEffect()
 3. useId()
+
+
+# How we can change the value of props?
+pass the props value to 'useState()' and change the value.
+
+# onChange or update state functions are independent. If one function changes then other functions are not re-renders.
+
+# safe way to update the state: using the callback function which has 'prevState' value.
+
+# can we use context and redux in same application? yes.
+
+# React context Potential Disadvantages: complex setup, complex management, performance
+
+# To maintain state during page refresh which hook usefull: set data using 'useEffect' hook.
+
+# React work flow: index.html => index.js => App.js.
+
+# Two-way data binding: we send the input value to state and state to input using value attribute in same component.
+
+# suppose we are trying to change the value using simple variable and simple js function.
+The function will execute, get the value in console but not in DOM.
+We need to tell react there is something change and certain components need to be evaluated that's why we need 'state'.
+when we call state update function it sets the value and tells react to rerender component with this new value. 
+its an async update.
+We use 'const' so we dont want to set the value accidently using assignment operator.
+
+
+
+# portals : overlays, modals are goes into portals.
+
+# side efects: side effects should not be simple function because it causes infinite loop. so use useEffect. 
+
+# What to add and What to not add as dependancies?
+Don't need to add state updating funcions, built-in apis like fetch, localstorage, variables or function defined outside of the component.
+Add function name as dependancy if we call that function inside 'useEffect' because whenever the function parameter changes the useEffect wil re-run.
+
+# useEffect: use debouncing technique in useEffect. means no need to re-run useEffect each and every keystroke. we have to wait some milliseonds and rerun the effect.If we not provide empty array as dependancy then 'useEffect' runs on every render cycle.
+
+# useReducer: for state management. reducer function is outside of the component function bcoz it doesnt need any data or interact with anything defined in component.
+
+# useMemo: We can use this hook for Array or Object. Array and Object are non-primitive data types. Each render Array or Object are re-created because they are reference type and each time new reference is created.
+
+# for security reason always connect to db with backend application.
+
+Redux
+--------------------------------------------------------------------------------------------------
+
+# createStore() : create redux store.
+
+# getState() : to get the snapshot of lates store.
+
+# subscribe() : whenever the state changes this function automatically calls to provide latest state value.
+we can create a function which has 'getState' is callback and pass this function as argument to 'subscribe()'.
+
+
+React Reouter
+------------------------------------------------
+
+If we use <a> element instead of <Link> then page refresshes means it sends a new request each time.
+
+<NavLink> sets the active classes on the element. we have to add 'activeClassName' prop.
+<NavLink activeClassName="active" to="/home">Home</NavLink>
+
+# 
+<Route path="/">
+<Redirect to='/'>
+</Route>
+
+# We have { Prompt} component from 'react-router-dom'
+It shows data when we leave the page.
+<Prompt when={isActive} message={(location) => 'are you sure want to leave?'} />
+
+# nested paths dont have to use forward slash because they are relative paths default.
+
+# useLoaderData hook to load the data dynamically.  add 'loader' props in <route> which has function name as value. that function calls when the page is load and that function has fetch request.
  
  
  

@@ -1,0 +1,153 @@
+# Basics
+Adding type safety to React Apps.
+It is a Superset to JS.
+Adds Static typing to JS.
+JS is dynamically typed.
+
+# Installation.
+yarn add typescript
+
+# have to convert ts to js so, compile file with following command.
+npx tsc
+
+# primitive types
+number, string, boolean
+
+let age: number = 30;
+let name: string = 'Pawan';
+let isWorking: boolean = true;
+
+# complex types
+arrys, numbers
+
+let hobbies: string[] = ['reading','music','movies'];
+can set number, boolean for numbered array and bollean values respective.
+
+# this type 'any' is not recommended.
+let person: any = { name: 'pawan', age: 30, isEmployee: true} 
+
+# recommended way.
+let person: { name: string, age:number, isEmployee:boolean} = { name: 'pawan', age: 30, isEmployee: true} ; 
+
+# Array of Objects.
+let person: { name: string, age:number, isEmployee:boolean}[];
+
+# union type: Assign more than 1 type. use 'pipe'(|) symbol.
+let course: string | number | boolean = 'React Course';
+course = 34872;
+course = true;
+
+# Type Alises: use 'type' or 'interface' or create a 'class'.
+type Person = { name: string, age: number }; OR
+interface Person = { name: string, age: number };
+
+let person: Person;
+let person2: Person[];
+
+# function and types: set type to each parameter and can set the return type of function like number, void.
+no need to explicitly define the function type each time.
+
+let sum = (a: number, b: number): number =>{
+  return a + b;
+}
+
+sum(1, 2);
+
+# Generics: Suppose we have a function has 2 parameters are array and single value having a type any because the array or value maybe any type like number or string. suppose its number we pass and try to apply string methods on that array elements then it cause run-time error. to work on this problem we have 'Generics'. It sets the flexible type.
+
+function insertAtBeggining(array: any[], value: any){
+  return [value,...array]
+}
+
+let result = insertAtBeggining([2,3,4], 1) // [1,2,3,4]
+result[0].split('') // gives an error because first element is number not a string.
+
+# solution:
+function insertAtBeggining<T>(array: T[], value: T){
+  return [value,...array]
+}
+let result = insertAtBeggining([2,3,4], 1) // [1,2,3,4]
+let result = insertAtBeggining(['b','c','d'], 'a') // ['a','b','c','d']
+
+// here 'T' stands in brackets <> for 'type'. we can use any letter here..
+
+## React + Typescript:
+React.FC: Its generic type for functional component.
+
+
+const App:React.FC = () =>{
+  return(
+    <Todo />
+  )
+}
+
+const Todo:React.FC<{items?: string[], onTodo: (text: string) => void}> = () =>{
+  // here type of function is 'FC' means functional component.
+  // after onTodo we use '(text: string) =>' means its type is function and accepts string argument and 'void' means it returns nothing. 
+  // and into <> bracket has type of props. adding question mark after bracket make it optional. then we are notgetting any error if we fail to pass the props.
+  // with generic type we define our own type like items: string[] in react. we can make it 'items' are optional by using '?' after 'items'. 
+  const inputRef = useRef<HTMLIputElement>(null);
+  const btnRef = useRef<HTMLbuttonElement>(null);
+  
+  // need to set default value for ref like 'null' so we dont get error on 'ref' in input or button.
+  // for input element we use 'HTMLInputelement', for button 'HTMLButtonElement', for paragraph 'HTMLParagraphElement'.
+  
+  const handleSubmit = (event: React.FormEvent) =>{
+    const enteredValue = inputRef.current!.value.
+    // after curret we use 'nullish'(!) operator. that meanse we 100% sure the current is not null. otherwise use '?'
+  }
+  // for form submission handler we use 'React.FormEvent' type.
+  
+  return({
+    {
+      props.items.map....
+    }
+    <input type="text" ref={inputRef} />
+    <button type="button" ref={btnRef}>Click Me</button>
+  })
+}
+
+ const todoContext = React.createContext<{ items: Todo[], addTodo: () => void}>({items: [], onAddTodo: () => {}});
+ 
+ 
+ const handleUserName = (event: React.MouseEvent<HTMLButtonElement>) => {
+    
+  }
+   // for button click
+  
+    const handleUserName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserName(event.target.value)
+  }
+   // for onChange Event.
+   
+   const [userName, setUserName] = useState<string | null>(null)
+   // either userName type is null or string.
+   
+   // type of 'children' is 'React.ReactNode'
+   
+   // when we send the function through the context to any page at that time use type of function is like:
+   handleCounter: React.Dispatch<React.setStateAction< string | null >>
+   
+   // if we are sending a 'component' the we use 'React.ComponentType'. if that component accepts prop then specify that props type in triangular brackets like:React.ComponentType<ProfileProps>
+   
+   // T extends empty object. if we want to specify the type of 'T'. <T extends {}>
+   
+   // rbl14262
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -141,13 +141,14 @@ git comit -m 'final deployment'
 git push heroku main // this comand find in heroku site.
 heroku open
 
-
-9. 
-
-
 ---------------------------------------------------------------------------------------------------------
 
+Before Deployment:
 
+Test code.
+Optimize code: use lazy loading, suspense component.
+Build App for Production: run a script to convert react to javascript that all browser understands and creates bundles. simply run build command.
+Upload production code to server. 
 
 
 
